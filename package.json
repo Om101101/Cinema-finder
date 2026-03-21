@@ -19,6 +19,7 @@
     "react-infinite-scroll-component": "^6.1.1",
     "react-player": "^3.4.0",
     "react-router-dom": "^7.13.1",
+    "remixicon": "^4.9.1",
     "tailwindcss": "^4.2.2"
   },
   "devDependencies": {
