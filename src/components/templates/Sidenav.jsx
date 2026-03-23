@@ -1,7 +1,21 @@
-import React from "react";
+import axios from "../../utils/Axios";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 function Sidenav() {
+  const GetSearch = async () => {
+    try {
+      const d= await axios.get("/search/multi")
+      console.log(d)
+    } catch (error) {
+      console.log("Error:",error)
+    }
+  };
+
+  useEffect(()=>{
+GetSearch()
+  },[])
+
   return (
     <div
       className="w-[260px] h-screen p-6 
