@@ -1,10 +1,13 @@
 import React from 'react'
+import Sidenav from './templates/Sidenav'
 
 function Home() {
   document.title = "SCSD| Homepage"
   return <>
-  <div className='w-[20%] h-full bg-amber-100'></div>
-  <div className='w-[80%] h-full bg-blue-200'></div>
+<Sidenav/>
+  <div className='w-[80%] h-full'>
+    
+  </div>
   </>
 }
 
