@@ -6,9 +6,11 @@ function Home() {
   document.title = "SCSD| Homepage";
   return (
     <>
-      <Sidenav />
-      <div className="w-[80%] h-full">
-        <Topnav />
+      <div className="flex w-full h-screen bg-zinc-900">
+        <Sidenav />
+        <div className="w-[80%] h-full overflow-hidden">
+          <Topnav />
+        </div>
       </div>
     </>
   );

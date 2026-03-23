@@ -2,51 +2,66 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 function Topnav() {
-  const [query, setquery]= useState("")
-  return (
-    <div className="w-full h-[10vh] relative  flex justify-center items-center ">
-      <i class="text-3xl text-zinc-400 ri-search-ai-line"></i>
-      <input
-      onChange={()=> setquery(e.target.value)}
-        className="w-[50%] mx-10 p-5 text-xl outline-none border-none text-white "
-        type="text"
-        placeholder="Search any Thing "
-      />
-      <i class="text-3xl text-zinc-400 ri-close-line"></i>
+  const [query, setquery] = useState("");
+  console.log(query);
 
-      <div className="absolute  w-[50%] h-[50vh] bg-zinc-200 top-[90%] overflow-auto">
-        <Link className="inline-block font-semibold hover:text-black  hover:bg-zinc-300 duration-300 text-zinc-600 w-[100%] p-10 flex justify-start  items-center border-2 border-zinc-100">
-          <img src="" alt="" />
-          <span>Movi name </span>
-        </Link>
-        <Link className="inline-block font-semibold hover:text-black  hover:bg-zinc-300 duration-300 text-zinc-600 w-[100%] p-10 flex justify-start  items-center border-2 border-zinc-100">
-          <img src="" alt="" />
-          <span>Movi name </span>
-        </Link>
-        <Link className="inline-block font-semibold hover:text-black  hover:bg-zinc-300 duration-300 text-zinc-600 w-[100%] p-10 flex justify-start  items-center border-2 border-zinc-100">
-          <img src="" alt="" />
-          <span>Movi name </span>
-        </Link>
-        <Link className="inline-block font-semibold hover:text-black  hover:bg-zinc-300 duration-300 text-zinc-600 w-[100%] p-10 flex justify-start  items-center border-2 border-zinc-100">
-          <img src="" alt="" />
-          <span>Movi name </span>
-        </Link>
-        <Link className="inline-block font-semibold hover:text-black  hover:bg-zinc-300 duration-300 text-zinc-600 w-[100%] p-10 flex justify-start  items-center border-2 border-zinc-100">
-          <img src="" alt="" />
-          <span>Movi name </span>
-        </Link>
-        <Link className="inline-block font-semibold hover:text-black  hover:bg-zinc-300 duration-300 text-zinc-600 w-[100%] p-10 flex justify-start  items-center border-2 border-zinc-100">
-          <img src="" alt="" />
-          <span>Movi name </span>
-        </Link>
-        <Link className="inline-block font-semibold hover:text-black  hover:bg-zinc-300 duration-300 text-zinc-600 w-[100%] p-10 flex justify-start  items-center border-2 border-zinc-100">
-          <img src="" alt="" />
-          <span>Movi name </span>
-        </Link>
-        <Link className="inline-block font-semibold hover:text-black  hover:bg-zinc-300 duration-300 text-zinc-600 w-[100%] p-10 flex justify-start  items-center border-2 border-zinc-100">
-          <img src="" alt="" />
-          <span>Movi name </span>
-        </Link>
+  return (
+    <div className="w-full h-[10vh] relative flex justify-start items-center ml-[20%] overflow-visible">
+      {/* Search Icon */}
+      <i className="text-2xl text-zinc-400 hover:text-white transition-all duration-300 hover:scale-110 ri-search-ai-line"></i>
+
+      {/* Input */}
+      <input
+        onChange={(e) => setquery(e.target.value)}
+        value={query}
+        className="w-[45%] mx-5 px-6 py-3 text-lg rounded-full 
+        bg-zinc-800/80 backdrop-blur-md text-white placeholder:text-zinc-400 
+        outline-none border border-zinc-700 
+        focus:border-blue-500 focus:ring-2 focus:ring-blue-500/40 
+        transition-all duration-300 shadow-lg focus:scale-[1.02]"
+        type="text"
+        placeholder="Search anything..."
+      />
+
+      {/* Close Icon */}
+      {query.length > 0 && (
+        <i
+          onClick={() => setquery("")}
+          className="text-2xl text-zinc-400 hover:text-red-400 cursor-pointer 
+          transition-all duration-300 hover:rotate-90 hover:scale-110 ri-close-line"
+        ></i>
+      )}
+
+      {/* Dropdown */}
+      <div
+        className={`absolute w-[45%] max-h-[50vh] 
+        bg-zinc-900/90 backdrop-blur-xl 
+        top-[115%] left-[3%] 
+        overflow-y-auto overscroll-contain
+        rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.6)] 
+        border border-zinc-700/50 
+        transition-all duration-300 origin-top z-50
+        ${
+          query.length > 0
+            ? "opacity-100 scale-100 translate-y-0"
+            : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
+        }`}
+      >
+        {/* Item */}
+        {/* <Link
+          className="group flex items-center gap-4 px-5 py-3 text-zinc-300 
+        hover:bg-zinc-800/70 hover:text-white 
+        transition-all duration-300 border-b border-zinc-800"
+        >
+          <img
+            className="w-12 h-14 object-cover rounded-md 
+            group-hover:scale-105 transition duration-300"
+            src="https://via.placeholder.com/50"
+            alt=""
+          />
+
+          <span className="text-sm font-medium tracking-wide">Movie Name</span>
+        </Link> */}
       </div>
     </div>
   );
