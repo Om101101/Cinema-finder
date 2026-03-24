@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Sidenav from "./templates/Sidenav";
 import Topnav from "./templates/Topnav";
 import axios from "../utils/Axios";
 import Header from "./templates/Header";
 import HorizontalCard from "./templates/HorizontalCard";
+import gsap from "gsap";
 
 function Home() {
   document.title = "SCSDB | Homepage";
+
   const [wallpaper, setwallpaper] = useState(null);
   const [tranding, settranding] = useState(null);
   const [indianMovies, setIndianMovies] = useState(null);
@@ -31,7 +33,6 @@ function Home() {
     }
   };
 
-  // Indian / Bollywood movies — Hindi language, sorted by popularity
   const GetIndianMovies = async () => {
     try {
       const { data } = await axios.get(
@@ -49,143 +50,94 @@ function Home() {
     GetIndianMovies();
   }, []);
 
-  /* ── LOADING ── */
-  if (!wallpaper) {
-    return (
-      <>
-        <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap');
-          .hl-root {
-            font-family: 'Outfit', sans-serif;
-            display: flex; width: 100%; min-height: 100vh;
-            background: #0c0b13;
-            align-items: center; justify-content: center;
-          }
-          .hl-card {
-            display: flex; flex-direction: column; align-items: center; gap: 24px;
-            padding: 40px 48px;
-            background: rgba(255,255,255,0.025);
-            border: 1px solid rgba(101,86,205,0.18);
-            border-radius: 24px;
-            box-shadow: 0 24px 80px rgba(0,0,0,0.5);
-          }
-          .hl-spinner { position: relative; width: 60px; height: 60px; }
-          .hl-ring {
-            position: absolute; inset: 0; border-radius: 50%;
-            border: 2.5px solid transparent;
-            border-top-color: #6556CD;
-            border-right-color: rgba(101,86,205,0.25);
-            animation: hlspin 0.95s linear infinite;
-          }
-          .hl-ring2 {
-            position: absolute; inset: 9px; border-radius: 50%;
-            border: 2px solid transparent;
-            border-bottom-color: #a89cf7;
-            border-left-color: rgba(168,156,247,0.2);
-            animation: hlspin 1.5s linear infinite reverse;
-          }
-          .hl-center-icon {
-            position: absolute; inset: 0;
-            display: flex; align-items: center; justify-content: center;
-          }
-          .hl-center-icon i { font-size: 22px; color: #6556CD; animation: hlpulse 1.8s ease-in-out infinite; }
-          @keyframes hlspin  { to { transform: rotate(360deg); } }
-          @keyframes hlpulse {
-            0%,100% { opacity:0.5; transform:scale(0.88); }
-            50%      { opacity:1;   transform:scale(1.06); }
-          }
-          .hl-label { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.55); letter-spacing: 0.05em; }
-          .hl-dots { display: flex; gap: 5px; }
-          .hl-dots span {
-            width: 5px; height: 5px; border-radius: 50%; background: #6556CD;
-            animation: hldot 1.2s ease-in-out infinite;
-          }
-          .hl-dots span:nth-child(2) { animation-delay:.2s; }
-          .hl-dots span:nth-child(3) { animation-delay:.4s; }
-          @keyframes hldot {
-            0%,80%,100%{ opacity:.2; transform:scale(.7); }
-            40%        { opacity:1;  transform:scale(1);  }
-          }
-        `}</style>
-        <div className="hl-root">
-          <div className="hl-card">
-            <div className="hl-spinner">
-              <div className="hl-ring" />
-              <div className="hl-ring2" />
-              <div className="hl-center-icon">
-                <i className="ri-film-line" />
-              </div>
-            </div>
-            <span className="hl-label">Fetching trending content</span>
-            <div className="hl-dots">
-              <span />
-              <span />
-              <span />
-            </div>
-          </div>
-        </div>
-      </>
-    );
-  }
+  /* 🔥 PREMIUM LOADER */
+  if (!wallpaper) return <PremiumLoader />;
 
-  /* ── MAIN LAYOUT ── */
   return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap');
-        *, *::before, *::after { box-sizing: border-box; }
-        .home-layout {
-          font-family: 'Outfit', sans-serif;
-          display: flex; width: 100%; min-height: 100vh; background: #0c0b13;
-        }
-        .home-main {
-          margin-left: 258px; flex: 1; min-height: 100vh;
-          display: flex; flex-direction: column;
-          overflow-x: hidden; overflow-y: auto; position: relative;
-          transition: margin-left 0.34s cubic-bezier(0.4,0,0.2,1);
-          scrollbar-width: thin; scrollbar-color: rgba(101,86,205,0.3) transparent;
-        }
-        .home-main::-webkit-scrollbar       { width: 4px; }
-        .home-main::-webkit-scrollbar-track  { background: transparent; }
-        .home-main::-webkit-scrollbar-thumb  { background: rgba(101,86,205,0.32); border-radius: 10px; }
-        .home-vignette {
-          position: sticky; top: 0; z-index: 50;
-          background: linear-gradient(180deg, rgba(12,11,19,0.92) 0%, rgba(12,11,19,0.6) 60%, transparent 100%);
-          padding-bottom: 10px; flex-shrink: 0;
-        }
-        .home-content { flex: 1; }
-        @media (max-width: 1024px) and (min-width: 769px) { .home-main { margin-left: 74px; } }
-        @media (max-width: 768px)  { .home-main { margin-left: 0; padding-bottom: 62px; } }
-      `}</style>
+    <div className="flex w-full min-h-screen bg-[#0c0b13] font-[Outfit]">
+      <Sidenav />
 
-      <div className="home-layout">
-        <Sidenav />
-        <div className="home-main">
-          <div className="home-vignette">
-            <Topnav />
-          </div>
-          <div className="home-content">
-            <Header data={wallpaper} />
+      <div className="flex-1 ml-[258px] max-md:ml-0 overflow-y-auto">
+        <div className="sticky top-0 z-50 bg-gradient-to-b from-[#0c0b13]/90 to-transparent pb-2">
+          <Topnav />
+        </div>
 
-            {/* Global Trending */}
-            <HorizontalCard
-              data={tranding}
-              title="Trending"
-              highlight="Today"
-              accentColor="#6556CD"
-            />
+        <div>
+          <Header data={wallpaper} />
 
-            {/* Indian / Bollywood */}
-            <HorizontalCard
-              data={indianMovies}
-              title="Bollywood"
-              highlight="Popular"
-              accentColor="#e8473f"
-            />
-          </div>
+          <HorizontalCard
+            data={tranding}
+            title="Trending"
+            highlight="Today"
+            accentColor="#6556CD"
+          />
+
+          <HorizontalCard
+            data={indianMovies}
+            title="Bollywood"
+            highlight="Popular"
+            accentColor="#e8473f"
+          />
         </div>
       </div>
-    </>
+    </div>
+  );
+}
+
+/* 💎 Premium Loader Component */
+function PremiumLoader() {
+  const dotsRef = useRef([]);
+
+  useEffect(() => {
+    gsap.fromTo(
+      dotsRef.current,
+      { y: 0, opacity: 0.3 },
+      {
+        y: -12,
+        opacity: 1,
+        duration: 0.5,
+        stagger: 0.2,
+        repeat: -1,
+        yoyo: true,
+        ease: "power1.inOut",
+      },
+    );
+  }, []);
+
+  return (
+    <div className="w-full h-screen flex flex-col items-center justify-center bg-[#0c0b13] text-white">
+      {/* ♾️ Infinity Loader */}
+      <div className="relative w-[100px] h-[50px] mb-6">
+        <div className="absolute w-4 h-4 rounded-full bg-gradient-to-r from-pink-500 to-yellow-400 shadow-lg animate-[infinity_2.5s_ease-in-out_infinite]" />
+        <div className="absolute w-4 h-4 rounded-full bg-gradient-to-r from-blue-400 to-indigo-500 shadow-lg animate-[infinity_2.5s_ease-in-out_infinite_1.25s]" />
+      </div>
+
+      {/* Text */}
+      <h2 className="text-sm tracking-widest text-zinc-400 mb-4">
+        FETCHING MOVIES
+      </h2>
+
+      {/* GSAP Dots */}
+      <div className="flex gap-2">
+        {[0, 1, 2].map((_, i) => (
+          <div
+            key={i}
+            ref={(el) => (dotsRef.current[i] = el)}
+            className="w-2 h-2 bg-purple-500 rounded-full"
+          />
+        ))}
+      </div>
+
+      {/* Keyframes */}
+      <style>{`
+        @keyframes infinity {
+          0%, 100% { left: 0; top: 50%; transform: translate(0, -50%); }
+          25% { left: 42px; top: 0; }
+          50% { left: 84px; top: 50%; }
+          75% { left: 42px; top: 100%; }
+        }
+      `}</style>
+    </div>
   );
 }
 
