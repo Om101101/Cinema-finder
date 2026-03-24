@@ -1,4 +1,5 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
+import TrailerModal from "./TrailerModal";
 
 function HorizontalCard({
   data,
@@ -7,6 +8,7 @@ function HorizontalCard({
   accentColor = "#6556CD",
 }) {
   const rowRef = useRef(null);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const scroll = (dir) => {
     if (rowRef.current) {
@@ -16,7 +18,6 @@ function HorizontalCard({
 
   const imgBase = "https://image.tmdb.org/t/p/w500";
 
-  // Convert hex accentColor to rgba for backgrounds
   const hexToRgba = (hex, alpha) => {
     const r = parseInt(hex.slice(1, 3), 16);
     const g = parseInt(hex.slice(3, 5), 16);
@@ -45,20 +46,16 @@ function HorizontalCard({
           font-size: 28px; letter-spacing: 0.06em;
           color: #fff; margin: 0;
         }
-
-        /* scroll controls */
         .hc-controls { display: flex; gap: 8px; }
         .hc-btn {
           width: 36px; height: 36px; border-radius: 50%;
-          border: 1px solid; /* color set inline */
+          border: 1px solid;
           display: flex; align-items: center; justify-content: center;
           cursor: pointer;
           transition: background 0.2s, color 0.2s;
           font-size: 16px;
           background: transparent;
         }
-
-        /* scroll row */
         .hc-row {
           display: flex; gap: 16px;
           overflow-x: auto; padding-bottom: 12px;
@@ -67,7 +64,6 @@ function HorizontalCard({
         }
         .hc-row::-webkit-scrollbar { display: none; }
 
-        /* card */
         .hc-card {
           flex-shrink: 0; width: 160px;
           scroll-snap-align: start;
@@ -79,15 +75,13 @@ function HorizontalCard({
                       box-shadow 0.28s ease, border-color 0.28s ease;
           position: relative;
         }
-
         .hc-poster-wrap {
           position: relative; width: 100%;
           aspect-ratio: 2/3; overflow: hidden;
           background: #1e1b2e;
         }
         .hc-poster {
-          width: 100%; height: 100%; object-fit: cover;
-          display: block;
+          width: 100%; height: 100%; object-fit: cover; display: block;
           transition: transform 0.4s ease;
         }
         .hc-card:hover .hc-poster { transform: scale(1.06); }
@@ -96,15 +90,29 @@ function HorizontalCard({
           position: absolute; inset: 0;
           background: linear-gradient(0deg, rgba(12,11,19,0.92) 0%, rgba(12,11,19,0.3) 50%, transparent 100%);
           opacity: 0; transition: opacity 0.3s ease;
-          display: flex; align-items: flex-end; padding: 12px;
+          display: flex; align-items: center; justify-content: center;
+          flex-direction: column; gap: 8px;
         }
         .hc-card:hover .hc-overlay { opacity: 1; }
 
-        .hc-play {
-          width: 36px; height: 36px; border-radius: 50%;
+        .hc-play-btn {
+          width: 52px; height: 52px; border-radius: 50%;
           display: flex; align-items: center; justify-content: center;
-          color: #fff; font-size: 14px;
+          color: #fff; font-size: 22px;
+          transform: scale(0.8);
+          transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+          border: 2px solid rgba(255,255,255,0.3);
         }
+        .hc-card:hover .hc-play-btn { transform: scale(1); }
+
+        .hc-play-label {
+          font-size: 11px; font-weight: 600;
+          color: rgba(255,255,255,0.75);
+          letter-spacing: 0.08em; text-transform: uppercase;
+          position: absolute; bottom: 12px;
+          opacity: 0; transition: opacity 0.3s ease;
+        }
+        .hc-card:hover .hc-play-label { opacity: 1; }
 
         .hc-badge {
           position: absolute; top: 8px; left: 8px;
@@ -123,7 +131,6 @@ function HorizontalCard({
           font-size: 11px; font-weight: 600; color: #fbbf24;
           display: flex; align-items: center; gap: 3px;
         }
-
         .hc-info { padding: 10px 10px 12px; }
         .hc-name {
           font-size: 13px; font-weight: 600;
@@ -162,11 +169,18 @@ function HorizontalCard({
         }
       `}</style>
 
+      {/* Trailer Modal — renders on top of everything */}
+      {selectedItem && (
+        <TrailerModal
+          item={selectedItem}
+          onClose={() => setSelectedItem(null)}
+        />
+      )}
+
       <div className="hc-section">
         {/* Header */}
         <div className="hc-header">
           <div className="hc-title-wrap">
-            {/* accent bar — color comes from prop */}
             <div
               style={{
                 width: 4,
@@ -181,44 +195,31 @@ function HorizontalCard({
           </div>
 
           <div className="hc-controls">
-            <button
-              className="hc-btn"
-              onClick={() => scroll(-1)}
-              aria-label="Scroll left"
-              style={{
-                borderColor: hexToRgba(accentColor, 0.4),
-                color: "rgba(255,255,255,0.7)",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = hexToRgba(accentColor, 0.25);
-                e.currentTarget.style.color = "#fff";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.color = "rgba(255,255,255,0.7)";
-              }}
-            >
-              <i className="ri-arrow-left-s-line" />
-            </button>
-            <button
-              className="hc-btn"
-              onClick={() => scroll(1)}
-              aria-label="Scroll right"
-              style={{
-                borderColor: hexToRgba(accentColor, 0.4),
-                color: "rgba(255,255,255,0.7)",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = hexToRgba(accentColor, 0.25);
-                e.currentTarget.style.color = "#fff";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.color = "rgba(255,255,255,0.7)";
-              }}
-            >
-              <i className="ri-arrow-right-s-line" />
-            </button>
+            {["left", "right"].map((dir) => (
+              <button
+                key={dir}
+                className="hc-btn"
+                onClick={() => scroll(dir === "left" ? -1 : 1)}
+                aria-label={`Scroll ${dir}`}
+                style={{
+                  borderColor: hexToRgba(accentColor, 0.4),
+                  color: "rgba(255,255,255,0.7)",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = hexToRgba(
+                    accentColor,
+                    0.25,
+                  );
+                  e.currentTarget.style.color = "#fff";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.color = "rgba(255,255,255,0.7)";
+                }}
+              >
+                <i className={`ri-arrow-${dir}-s-line`} />
+              </button>
+            ))}
           </div>
         </div>
 
@@ -226,7 +227,7 @@ function HorizontalCard({
         <div className="hc-row" ref={rowRef}>
           {data
             ? data.map((item) => {
-                const title = item.title || item.name || "Untitled";
+                const itemTitle = item.title || item.name || "Untitled";
                 const year = (
                   item.release_date ||
                   item.first_air_date ||
@@ -244,6 +245,7 @@ function HorizontalCard({
                   <div
                     className="hc-card"
                     key={item.id}
+                    onClick={() => setSelectedItem(item)}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.transform =
                         "translateY(-8px) scale(1.03)";
@@ -264,7 +266,7 @@ function HorizontalCard({
                       {poster ? (
                         <img
                           src={poster}
-                          alt={title}
+                          alt={itemTitle}
                           className="hc-poster"
                           loading="lazy"
                         />
@@ -288,20 +290,20 @@ function HorizontalCard({
 
                       <div className="hc-overlay">
                         <div
-                          className="hc-play"
+                          className="hc-play-btn"
                           style={{
-                            background: accentColor,
-                            boxShadow: `0 4px 16px ${hexToRgba(accentColor, 0.5)}`,
+                            background: hexToRgba(accentColor, 0.85),
+                            boxShadow: `0 0 24px ${hexToRgba(accentColor, 0.6)}`,
                           }}
                         >
                           <i className="ri-play-fill" />
                         </div>
+                        <span className="hc-play-label">Trailer dekhein</span>
                       </div>
 
                       <span className={`hc-badge ${type}`}>
                         {type === "tv" ? "Series" : "Movie"}
                       </span>
-
                       <span className="hc-rating">
                         <i className="ri-star-fill" style={{ fontSize: 10 }} />
                         {rating}
@@ -309,8 +311,8 @@ function HorizontalCard({
                     </div>
 
                     <div className="hc-info">
-                      <p className="hc-name" title={title}>
-                        {title}
+                      <p className="hc-name" title={itemTitle}>
+                        {itemTitle}
                       </p>
                       <div className="hc-meta">
                         <span>{year || "—"}</span>

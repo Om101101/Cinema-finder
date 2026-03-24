@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
+import TrailerModal from "./TrailerModal";
 
 function Header({ data }) {
-  if (!data) return null; // safety check
+  const [showTrailer, setShowTrailer] = useState(false);
+
+  if (!data) return null;
 
   return (
     <>
@@ -34,7 +37,6 @@ function Header({ data }) {
         }
 
         /* ── Gradient overlays ── */
-        /* bottom fade to dark */
         .hdr-gradient-bottom {
           position: absolute;
           inset: 0;
@@ -46,7 +48,6 @@ function Header({ data }) {
             transparent    100%
           );
         }
-        /* left vignette for text readability */
         .hdr-gradient-left {
           position: absolute;
           inset: 0;
@@ -57,7 +58,6 @@ function Header({ data }) {
             transparent         100%
           );
         }
-        /* subtle top edge */
         .hdr-gradient-top {
           position: absolute;
           inset: 0;
@@ -134,7 +134,7 @@ function Header({ data }) {
           max-width: 700px;
         }
 
-        /* meta row — rating, year, lang */
+        /* meta row */
         .hdr-meta {
           display: flex;
           align-items: center;
@@ -204,6 +204,25 @@ function Header({ data }) {
           box-shadow: 0 10px 32px rgba(101,86,205,0.6);
           filter: brightness(1.1);
         }
+
+        /* pulse ring on watch now button */
+        .hdr-btn-primary-wrap {
+          position: relative;
+          width: fit-content;
+        }
+        .hdr-btn-pulse {
+          position: absolute;
+          inset: -4px;
+          border-radius: 100px;
+          border: 2px solid rgba(101,86,205,0.5);
+          animation: hdr-pulse-ring 2s ease-out infinite;
+          pointer-events: none;
+        }
+        @keyframes hdr-pulse-ring {
+          0%   { transform: scale(1);    opacity: 0.7; }
+          100% { transform: scale(1.18); opacity: 0;   }
+        }
+
         .hdr-btn-secondary {
           display: inline-flex;
           align-items: center;
@@ -270,8 +289,8 @@ function Header({ data }) {
           animation: hdr-scroll-line 1.6s ease-in-out infinite;
         }
         @keyframes hdr-scroll-line {
-          0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
-          50%  { transform: scaleY(1); transform-origin: top; opacity: 1; }
+          0%   { transform: scaleY(0); transform-origin: top;    opacity: 1; }
+          50%  { transform: scaleY(1); transform-origin: top;    opacity: 1; }
           100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
         }
 
@@ -285,7 +304,6 @@ function Header({ data }) {
           .hdr-content { padding: 0 32px 36px; }
           .hdr-title   { font-size: clamp(36px, 7vw, 62px); }
         }
-
         @media (max-width: 768px) {
           .hdr-root    { height: 62vh; min-height: 360px; }
           .hdr-content { padding: 0 20px 28px; }
@@ -295,7 +313,6 @@ function Header({ data }) {
           .hdr-btn-primary, .hdr-btn-secondary { font-size: 12px; padding: 9px 18px; }
           .hdr-scroll-hint { display: none; }
         }
-
         @media (max-width: 480px) {
           .hdr-root    { height: 58vh; min-height: 320px; }
           .hdr-content { padding: 0 16px 24px; }
@@ -306,8 +323,13 @@ function Header({ data }) {
         }
       `}</style>
 
+      {/* Trailer Modal — sirf tab render hoga jab showTrailer true ho */}
+      {showTrailer && (
+        <TrailerModal item={data} onClose={() => setShowTrailer(false)} />
+      )}
+
       <div className="hdr-root">
-        {/* Background image */}
+        {/* Background */}
         <div
           className="hdr-bg"
           style={{
@@ -317,7 +339,7 @@ function Header({ data }) {
           }}
         />
 
-        {/* Overlay layers */}
+        {/* Overlays */}
         <div className="hdr-gradient-bottom" />
         <div className="hdr-gradient-left" />
         <div className="hdr-gradient-top" />
@@ -342,7 +364,7 @@ function Header({ data }) {
             {data.title || data.name || data.original_name}
           </h1>
 
-          {/* Meta chips */}
+          {/* Meta */}
           <div className="hdr-meta">
             {data.vote_average > 0 && (
               <>
@@ -376,12 +398,20 @@ function Header({ data }) {
             {data.overview?.length > 180 ? "…" : ""}
           </p>
 
-          {/* Action buttons */}
+          {/* Actions */}
           <div className="hdr-actions">
-            <button className="hdr-btn-primary">
-              <i className="ri-play-fill" />
-              Watch Now
-            </button>
+            {/* Watch Now — opens TrailerModal on click */}
+            <div className="hdr-btn-primary-wrap">
+              <div className="hdr-btn-pulse" />
+              <button
+                className="hdr-btn-primary"
+                onClick={() => setShowTrailer(true)}
+              >
+                <i className="ri-youtube-fill" />
+                Watch Trailer
+              </button>
+            </div>
+
             <button className="hdr-btn-secondary">
               <i className="ri-information-line" />
               More Info
