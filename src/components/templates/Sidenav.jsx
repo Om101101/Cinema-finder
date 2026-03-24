@@ -7,7 +7,7 @@ function Sidenav() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const navLinks1 = [
-    { to: "/trending", icon: "ri-fire-fill", label: "Trending" },
+    { to: "/TrendingPage", icon: "ri-fire-fill", label: "Trending" },
     { to: "/popular", icon: "ri-bard-fill", label: "Popular" },
     { to: "/toprated", icon: "ri-star-smile-fill", label: "Top Rated" },
     { to: "/movies", icon: "ri-clapperboard-fill", label: "Movies" },
