@@ -3,10 +3,12 @@ import Sidenav from "./templates/Sidenav";
 import Topnav from "./templates/Topnav";
 import axios from "../utils/Axios";
 import Header from "./templates/Header";
+import HorizontalCard from "./templates/HorizontalCard";
 
 function Home() {
   document.title = "SCSDB | Homepage";
   const [wallpaper, setwallpaper] = useState(null);
+  const [tranding, settranding] = useState(null);
 
   const GetHeaderWallpaper = async () => {
     try {
@@ -19,10 +21,20 @@ function Home() {
     }
   };
 
-  useEffect(() => {
-    if (!wallpaper) {
-      GetHeaderWallpaper();
+  const GetTranding = async () => {
+    try {
+      const { data } = await axios.get("/trending/all/day");
+      settranding(data.results); // FIX 1: was data.result (typo — missing 's')
+    } catch (error) {
+      console.log("Error", error);
     }
+  };
+
+  useEffect(() => {
+    // FIX 2: both fetches run independently on mount,
+    // not nested inside each other with broken conditions
+    GetHeaderWallpaper();
+    GetTranding();
   }, []);
 
   /* ────────────────────────────────────────────
@@ -142,6 +154,8 @@ function Home() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap');
 
+        /* FIX 3: removed stray JS import statement that was sitting inside this CSS string */
+
         *, *::before, *::after { box-sizing: border-box; }
 
         .home-layout {
@@ -163,7 +177,6 @@ function Home() {
           overflow-y: auto;
           position: relative;
           transition: margin-left 0.34s cubic-bezier(0.4,0,0.2,1);
-          /* styled scrollbar */
           scrollbar-width: thin;
           scrollbar-color: rgba(101,86,205,0.3) transparent;
         }
@@ -174,12 +187,10 @@ function Home() {
           border-radius: 10px;
         }
 
-        /* fixed vignette so topnav always has a dark backdrop */
         .home-vignette {
           position: sticky;
           top: 0;
           z-index: 50;
-          /* gradient drawn on the element itself so it's always above Header */
           background: linear-gradient(
             180deg,
             rgba(12,11,19,0.92) 0%,
@@ -210,13 +221,14 @@ function Home() {
         <Sidenav />
 
         <div className="home-main">
-          {/* Sticky gradient wrapper for Topnav */}
           <div className="home-vignette">
             <Topnav />
           </div>
 
           <div className="home-content">
             <Header data={wallpaper} />
+            {/* FIX 4: pass trending data as prop so HorizontalCard can render it */}
+            <HorizontalCard data={tranding} />
           </div>
         </div>
       </div>
