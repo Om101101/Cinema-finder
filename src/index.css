@@ -8,11 +8,64 @@
     width: 7px;
     height: 7px;
 }
-::-webkit-scrollbar-thumb{
+
+::-webkit-scrollbar-thumb {
     background: #181819;
     border-radius: 10px;
 }
-::-webkit-scrollbar-thumb:hover{
-    background:  #6556CD ;
+
+::-webkit-scrollbar-thumb:hover {
+    background: #6556CD;
     border-radius: 10px;
+}
+
+
+
+
+/* Add this to your global CSS file */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleUp {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-fadeInUp {
+    animation: fadeInUp 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-scaleUp {
+    animation: scaleUp 0.3s ease-out forwards;
 }
