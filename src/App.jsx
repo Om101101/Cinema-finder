@@ -2,6 +2,8 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Home from "./components/Home";
 import TrendingPage from "./components/templates/TrendingPage";
+import Popular from './components/templates/Popular';
+import People from './components/templates/People';
 
 function App() {
   return (
@@ -9,6 +11,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/TrendingPage" element={<TrendingPage />} />
+        <Route path="/Popular" element={<Popular />} />
+        <Route path="/People" element={<People />} />
+
       </Routes>
     </div>
   );

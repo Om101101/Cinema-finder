@@ -8,11 +8,11 @@ function Sidenav() {
 
   const navLinks1 = [
     { to: "/TrendingPage", icon: "ri-fire-fill", label: "Trending" },
-    { to: "/popular", icon: "ri-bard-fill", label: "Popular" },
+    { to: "/Popular", icon: "ri-bard-fill", label: "Popular" },
     { to: "/toprated", icon: "ri-star-smile-fill", label: "Top Rated" },
     { to: "/movies", icon: "ri-clapperboard-fill", label: "Movies" },
     { to: "/tv", icon: "ri-tv-2-fill", label: "TV Shows" },
-    { to: "/people", icon: "ri-team-line", label: "People" },
+    { to: "/People", icon: "ri-team-line", label: "People" },
   ];
 
   const navLinks2 = [
