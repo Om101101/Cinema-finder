@@ -21,15 +21,15 @@
 
 ## ✨ Key Features
 
-* 🔥 Real-time **Trending Movies**
-* ⭐ Explore **Popular & Top Rated**
-* 🎬 Detailed **Movie Info Pages**
-* ▶️ Trailer Playback (YouTube)
-* 🔍 Smart Search
-* ♾️ Infinite Scrolling
-* 🎨 Modern UI (Tailwind CSS)
-* ⚡ Fast performance (Vite)
-* 🎞️ Smooth animations (GSAP + Framer Motion)
+- 🔥 Real-time **Trending Movies**
+- ⭐ Explore **Popular & Top Rated**
+- 🎬 Detailed **Movie Info Pages**
+- ▶️ Trailer Playback (YouTube)
+- 🔍 Smart Search
+- ♾️ Infinite Scrolling
+- 🎨 Modern UI (Tailwind CSS)
+- ⚡ Fast performance (Vite)
+- 🎞️ Smooth animations (GSAP + Framer Motion)
 
 ---
 
@@ -49,9 +49,9 @@
 ## 📸 Preview
 
 <p align="center">
-  <img src="assets/screenshots/home.png" width="30%" />
-  <img src="assets/screenshots/trending.png" width="30%" />
-  <img src="assets/screenshots/details.png" width="30%" />
+  <img src="src\assets\image-1.png" width="30%" />
+  <img src="src\assets\image-2.png" width="30%" />
+  <img src="src\assets\image-3.png" width="30%" />
 </p>
 
 ---
@@ -79,10 +79,10 @@ src/utils/Axios.jsx
 
 ## 🌟 Future Plans
 
-* 🔐 Authentication
-* ❤️ Watchlist
-* 📱 Mobile Optimization
-* 🤖 AI Recommendations
+- 🔐 Authentication
+- ❤️ Watchlist
+- 📱 Mobile Optimization
+- 🤖 AI Recommendations
 
 ---
 
