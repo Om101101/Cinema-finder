@@ -15,161 +15,84 @@
 
 ## 🚀 Overview
 
-**SCSDB (Smart Cinema Search Database)** is a sleek and responsive movie web application designed to deliver a seamless browsing experience. Users can explore trending, popular, and top-rated movies with real-time data, smooth animations, and an intuitive UI.
+**SCSDB (Smart Cinema Search Database)** is a sleek and responsive movie web application designed to deliver a seamless browsing experience with real-time movie data and smooth animations.
 
 ---
 
 ## ✨ Key Features
 
 * 🔥 Real-time **Trending Movies**
-* ⭐ Explore **Popular & Top Rated** content
-* 🎬 Detailed **Movie Information Pages**
-* ▶️ Integrated **Trailer Playback**
-* 🔍 Smart **Search Functionality**
-* ♾️ **Infinite Scrolling** for continuous browsing
-* 🎨 Clean & modern UI using Tailwind CSS
-* ⚡ Lightning-fast performance with Vite
-* 🎞️ Smooth animations using GSAP & Framer Motion
+* ⭐ Explore **Popular & Top Rated**
+* 🎬 Detailed **Movie Info Pages**
+* ▶️ Trailer Playback (YouTube)
+* 🔍 Smart Search
+* ♾️ Infinite Scrolling
+* 🎨 Modern UI (Tailwind CSS)
+* ⚡ Fast performance (Vite)
+* 🎞️ Smooth animations (GSAP + Framer Motion)
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Category    | Technology Used     |
-| ----------- | ------------------- |
-| Frontend    | React.js (Vite)     |
-| Styling     | Tailwind CSS        |
-| State Mgmt  | Redux Toolkit       |
-| API         | TMDB API            |
-| HTTP Client | Axios               |
-| Routing     | React Router DOM    |
-| Animations  | GSAP, Framer Motion |
-
----
-
-## 📁 Project Architecture
-
-```
-SCSDB/
-├── public/
-│   ├── favicon.svg
-│   └── assets
-├── src/
-│   ├── assets/
-│   ├── components/
-│   │   ├── templates/
-│   │   └── Home.jsx
-│   ├── utils/
-│   │   └── Axios.jsx
-│   ├── App.jsx
-│   ├── main.jsx
-│   └── index.css
-├── package.json
-└── vite.config.js
-```
-
----
-
-## ⚙️ Installation Guide
-
-### 1️⃣ Clone Repository
-
-```bash
-git clone https://github.com/your-username/scsdb.git
-cd scsdb
-```
-
----
-
-### 2️⃣ Install Dependencies
-
-```bash
-npm install
-```
-
----
-
-### 3️⃣ Configure API Key
-
-* Visit: https://www.themoviedb.org/
-* Generate your **Bearer Token**
-
-Update in:
-
-```
-src/utils/Axios.jsx
-```
-
-```javascript
-Authorization: "Bearer YOUR_TMDB_API_KEY"
-```
-
----
-
-### 4️⃣ Run Development Server
-
-```bash
-npm run dev
-```
-
-🌐 Open in browser:
-
-```
-http://localhost:5173
-```
+| Category   | Technology Used     |
+| ---------- | ------------------- |
+| Frontend   | React.js (Vite)     |
+| Styling    | Tailwind CSS        |
+| State Mgmt | Redux Toolkit       |
+| API        | TMDB API            |
+| Routing    | React Router DOM    |
+| Animations | GSAP, Framer Motion |
 
 ---
 
 ## 📸 Preview
 
-> 🚧 Add screenshots or demo GIFs here for better presentation
+<p align="center">
+  <img src="assets/screenshots/home.png" width="30%" />
+  <img src="assets/screenshots/trending.png" width="30%" />
+  <img src="assets/screenshots/details.png" width="30%" />
+</p>
 
 ---
 
-## 🌟 Roadmap / Future Enhancements
+## ⚙️ Installation
 
-* 🔐 User Authentication (Login/Register)
-* ❤️ Watchlist & Favorites System
-* 📱 Fully Responsive Mobile Optimization
-* 🌍 Multi-language Support
-* 🤖 AI-based Movie Recommendations
-* 📊 User Dashboard & Analytics
-
----
-
-## 🤝 Contribution Guidelines
-
-Contributions are welcome!
-
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push and open a Pull Request
+```bash
+git clone https://github.com/Om101101/Cinema-finder.git
+cd Cinema-finder
+npm install
+npm run dev
+```
 
 ---
 
-## 📄 License
+## 🔑 API Setup
 
-This project is licensed under the **MIT License** — free to use and modify.
+Get your API key from TMDB and update:
+
+```
+src/utils/Axios.jsx
+```
+
+---
+
+## 🌟 Future Plans
+
+* 🔐 Authentication
+* ❤️ Watchlist
+* 📱 Mobile Optimization
+* 🤖 AI Recommendations
 
 ---
 
 ## 👨‍💻 Author
 
 **Om Jaiswal**
-🎓 BCA Student | 💻 Frontend Developer 
+Frontend Developer | BCA Student
 
 ---
 
 ## ⭐ Support
 
-If you found this project helpful:
-
-👉 Give it a **star ⭐ on GitHub**
-👉 Share it with others
-
----
-
-<p align="center">
-  🚀 Built with passion & modern web technologies
-</p>
+If you like this project, give it a ⭐ on GitHub!
