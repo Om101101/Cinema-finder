@@ -1,6 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import TrailerModal from "./TrailerModal";
 
+// ─── Single Row Section ───────────────────────────────────────────────────────
 function HorizontalCard({
   data,
   title = "Trending",
@@ -167,9 +168,15 @@ function HorizontalCard({
           0%   { background-position: 200% 0; }
           100% { background-position: -200% 0; }
         }
+
+        /* ── Section Divider ── */
+        .hc-section-divider {
+          height: 1px;
+          margin: 0 28px;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+        }
       `}</style>
 
-      {/* Trailer Modal — renders on top of everything */}
       {selectedItem && (
         <TrailerModal
           item={selectedItem}
@@ -178,7 +185,6 @@ function HorizontalCard({
       )}
 
       <div className="hc-section">
-        {/* Header */}
         <div className="hc-header">
           <div className="hc-title-wrap">
             <div
@@ -223,7 +229,6 @@ function HorizontalCard({
           </div>
         </div>
 
-        {/* Card Row */}
         <div className="hc-row" ref={rowRef}>
           {data
             ? data.map((item) => {
@@ -298,7 +303,7 @@ function HorizontalCard({
                         >
                           <i className="ri-play-fill" />
                         </div>
-                        <span className="hc-play-label">Trailer dekhein</span>
+                        <span className="hc-play-label">Trailer</span>
                       </div>
 
                       <span className={`hc-badge ${type}`}>
@@ -337,6 +342,87 @@ function HorizontalCard({
         </div>
       </div>
     </>
+  );
+}
+
+
+export function MovieSections({ apiKey }) {
+  const [sections, setSections] = useState([
+    {
+      id: "trending",
+      title: "Trending",
+      highlight: "Today",
+      accentColor: "#6556CD",
+      endpoint: "trending/movie/day",
+      data: null,
+    },
+    {
+      id: "popular",
+      title: "Popular",
+      highlight: "Movies",
+      accentColor: "#E11D48",
+      endpoint: "movie/popular",
+      data: null,
+    },
+    {
+      id: "top_rated",
+      title: "Top",
+      highlight: "Rated",
+      accentColor: "#F59E0B",
+      endpoint: "movie/top_rated",
+      data: null,
+    },
+    {
+      id: "upcoming",
+      title: "Upcoming",
+      highlight: "Movies",
+      accentColor: "#10B981",
+      endpoint: "movie/upcoming",
+      data: null,
+    },
+    {
+      id: "now_playing",
+      title: "Now",
+      highlight: "Playing",
+      accentColor: "#3B82F6",
+      endpoint: "movie/now_playing",
+      data: null,
+    },
+  ]);
+
+  useEffect(() => {
+    if (!apiKey) return;
+
+    sections.forEach((sec) => {
+      fetch(
+        `https://api.themoviedb.org/3/${sec.endpoint}?api_key=${apiKey}&language=en-US&page=1`,
+      )
+        .then((r) => r.json())
+        .then((json) => {
+          setSections((prev) =>
+            prev.map((s) =>
+              s.id === sec.id ? { ...s, data: json.results } : s,
+            ),
+          );
+        })
+        .catch(console.error);
+    });
+  }, [apiKey]);
+
+  return (
+    <div style={{ background: "#0c0b13", minHeight: "100vh" }}>
+      {sections.map((sec, idx) => (
+        <React.Fragment key={sec.id}>
+          <HorizontalCard
+            data={sec.data}
+            title={sec.title}
+            highlight={sec.highlight}
+            accentColor={sec.accentColor}
+          />
+          {idx < sections.length - 1 && <div className="hc-section-divider" />}
+        </React.Fragment>
+      ))}
+    </div>
   );
 }
 

@@ -9,48 +9,41 @@ import gsap from "gsap";
 function Home() {
   document.title = "SCSDB | Homepage";
 
-  const [wallpaper, setwallpaper] = useState(null);
-  const [tranding, settranding] = useState(null);
+  const [wallpaper, setWallpaper] = useState(null);
+  const [trending, setTrending] = useState(null);
   const [indianMovies, setIndianMovies] = useState(null);
-
-  const GetHeaderWallpaper = async () => {
-    try {
-      const { data } = await axios.get("/trending/all/day");
-      let random =
-        data.results[Math.floor(Math.random() * data.results.length)];
-      setwallpaper(random);
-    } catch (error) {
-      console.log("Error", error);
-    }
-  };
-
-  const GetTranding = async () => {
-    try {
-      const { data } = await axios.get("/trending/all/day");
-      settranding(data.results);
-    } catch (error) {
-      console.log("Error", error);
-    }
-  };
-
-  const GetIndianMovies = async () => {
-    try {
-      const { data } = await axios.get(
-        "/discover/movie?with_original_language=hi&sort_by=popularity.desc&region=IN",
-      );
-      setIndianMovies(data.results);
-    } catch (error) {
-      console.log("Error fetching Indian movies:", error);
-    }
-  };
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    GetHeaderWallpaper();
-    GetTranding();
-    GetIndianMovies();
+    const fetchAll = async () => {
+      try {
+        const [trendingRes, indianRes] = await Promise.all([
+          axios.get("/trending/all/day"),
+          axios.get(
+            "/discover/movie?with_original_language=hi&sort_by=popularity.desc&region=IN",
+          ),
+        ]);
+
+        const results = trendingRes.data.results;
+        setWallpaper(results[Math.floor(Math.random() * results.length)]);
+        setTrending(results);
+        setIndianMovies(indianRes.data.results);
+      } catch (err) {
+        console.error("Fetch error:", err);
+        setError(true);
+      }
+    };
+
+    fetchAll();
   }, []);
 
-  /* 🔥 PREMIUM LOADER */
+  if (error)
+    return (
+      <div className="w-full h-screen flex items-center justify-center bg-[#0c0b13] text-zinc-400 text-sm tracking-widest">
+        FAILED TO LOAD — CHECK CONNECTION
+      </div>
+    );
+
   if (!wallpaper) return <PremiumLoader />;
 
   return (
@@ -62,41 +55,63 @@ function Home() {
           <Topnav />
         </div>
 
-        <div>
-          <Header data={wallpaper} />
+        <Header data={wallpaper} />
 
-          <HorizontalCard
-            data={tranding}
-            title="Trending"
-            highlight="Today"
-            accentColor="#6556CD"
-          />
+        <HorizontalCard
+          data={trending}
+          title="Trending"
+          highlight="Today"
+          accentColor="#6556CD"
+        />
 
-          <HorizontalCard
-            data={indianMovies}
-            title="Bollywood"
-            highlight="Popular"
-            accentColor="#e8473f"
-          />
-        </div>
+        <HorizontalCard
+          data={indianMovies}
+          title="Bollywood"
+          highlight="Popular"
+          accentColor="#e8473f"
+        />
       </div>
     </div>
   );
 }
 
-/* 💎 Premium Loader Component */
 function PremiumLoader() {
+  const pathRef = useRef(null);
+  const dotRef = useRef(null);
   const dotsRef = useRef([]);
 
   useEffect(() => {
+    const path = pathRef.current;
+    const length = path.getTotalLength();
+
+    gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+    gsap.to(path, {
+      strokeDashoffset: 0,
+      duration: 1.5,
+      ease: "power2.inOut",
+      repeat: -1,
+      yoyo: true,
+    });
+
+    gsap.to(dotRef.current, {
+      motionPath: {
+        path: pathRef.current,
+        align: pathRef.current,
+        autoRotate: false,
+      },
+      duration: 2.5,
+      ease: "none",
+      repeat: -1,
+    });
+
     gsap.fromTo(
       dotsRef.current,
       { y: 0, opacity: 0.3 },
       {
-        y: -12,
+        y: -10,
         opacity: 1,
-        duration: 0.5,
-        stagger: 0.2,
+        duration: 0.45,
+        stagger: 0.15,
         repeat: -1,
         yoyo: true,
         ease: "power1.inOut",
@@ -105,38 +120,52 @@ function PremiumLoader() {
   }, []);
 
   return (
-    <div className="w-full h-screen flex flex-col items-center justify-center bg-[#0c0b13] text-white">
-      {/* ♾️ Infinity Loader */}
-      <div className="relative w-[100px] h-[50px] mb-6">
-        <div className="absolute w-4 h-4 rounded-full bg-gradient-to-r from-pink-500 to-yellow-400 shadow-lg animate-[infinity_2.5s_ease-in-out_infinite]" />
-        <div className="absolute w-4 h-4 rounded-full bg-gradient-to-r from-blue-400 to-indigo-500 shadow-lg animate-[infinity_2.5s_ease-in-out_infinite_1.25s]" />
-      </div>
+    <div className="w-full h-screen flex flex-col items-center justify-center bg-[#0c0b13] text-white gap-5">
+      <svg
+        width="120"
+        height="60"
+        viewBox="0 0 120 60"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          ref={pathRef}
+          d="M60 30 C60 10, 20 10, 20 30 C20 50, 60 50, 60 30 C60 10, 100 10, 100 30 C100 50, 60 50, 60 30"
+          stroke="url(#loaderGrad)"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          fill="none"
+        />
+        <circle ref={dotRef} r="5" fill="#a78bfa" />
+        <defs>
+          <linearGradient
+            id="loaderGrad"
+            x1="20"
+            y1="30"
+            x2="100"
+            y2="30"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#ec4899" />
+            <stop offset="0.5" stopColor="#a78bfa" />
+            <stop offset="1" stopColor="#60a5fa" />
+          </linearGradient>
+        </defs>
+      </svg>
 
-      {/* Text */}
-      <h2 className="text-sm tracking-widest text-zinc-400 mb-4">
-        FETCHING MOVIES
-      </h2>
+      <p className="text-[11px] tracking-[0.3em] text-zinc-500 uppercase">
+        Fetching Movies
+      </p>
 
-      {/* GSAP Dots */}
       <div className="flex gap-2">
         {[0, 1, 2].map((_, i) => (
           <div
             key={i}
             ref={(el) => (dotsRef.current[i] = el)}
-            className="w-2 h-2 bg-purple-500 rounded-full"
+            className="w-1.5 h-1.5 rounded-full bg-purple-500"
           />
         ))}
       </div>
-
-      {/* Keyframes */}
-      <style>{`
-        @keyframes infinity {
-          0%, 100% { left: 0; top: 50%; transform: translate(0, -50%); }
-          25% { left: 42px; top: 0; }
-          50% { left: 84px; top: 50%; }
-          75% { left: 42px; top: 100%; }
-        }
-      `}</style>
     </div>
   );
 }
